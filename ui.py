@@ -1,41 +1,47 @@
 from tkinter import *
 from data_management import get_default
+import random
 
 
 class GUI:
 	def __init__(self, dict_input):
 		self.root = Tk()
 		self.root.title('My own flashcards with juegos de azar and mujerzuelas')
-		self.root.geometry('500x200')
+		self.root.geometry('700x400')
 		# self.root.grid_columnconfigure(3, minsize=100)
-		self.root.option_add('*Font', '32')
+		self.btn_font_size = 12
 
-		self.word = Label(self.root, text='Wort')
+		self.word = Label(self.root, text='Wort', font=('Arial', 30))
 		self.word.grid(column=1, row=0)
-		self.answer = Label(self.root, text='-------')
+		self.answer = Label(self.root, text='-------', font=('Arial', 15))
 		self.answer.grid(column=1, row=1)
-		self.right_answer = Label(self.root, text='0', fg='green')
+		self.right_answer = Label(self.root, text='0', fg='green', font=('Arial', self.btn_font_size))
 		self.right_answer.grid(column=0, row=4)
-		self.close_answer = Label(self.root, text='0', fg='orange')
+		self.close_answer = Label(self.root, text='0', fg='orange', font=('Arial', self.btn_font_size))
 		self.close_answer.grid(column=1, row=4)
-		self.wrong_answer = Label(self.root, text='0', fg='red')
+		self.wrong_answer = Label(self.root, text='0', fg='red', font=('Arial', self.btn_font_size))
 		self.wrong_answer.grid(column=2, row=4)
 
-		self.get_answer = Button(self.root, text='Antwort zeigen', fg='black', command=self.show_answer)
+		self.get_answer = Button(self.root, text='Antwort zeigen', fg='black', command=self.show_answer,
+								 font=('Arial', self.btn_font_size))
 		self.get_answer.grid(column=1, row=2)
 
-		self.btn_right = Button(self.root, text='Richtig! :D', fg='green', command=self.click_right)
+		self.btn_right = Button(self.root, text='Richtig!', fg='green', command=self.click_right,
+								font=('Arial', self.btn_font_size))
 		self.btn_right.grid(column=0, row=3)
-		self.btn_close = Button(self.root, text='Teilweise :s', fg='orange', command=self.click_close)
+		self.btn_close = Button(self.root, text='Teilweise', fg='orange', command=self.click_close,
+								font=('Arial', self.btn_font_size))
 		self.btn_close.grid(column=1, row=3)
-		self.btn_wrong = Button(self.root, text='Unbekannt :c', fg='red', command=self.click_wrong)
+		self.btn_wrong = Button(self.root, text='Unbekannt', fg='red', command=self.click_wrong,
+								font=('Arial', self.btn_font_size))
 		self.btn_wrong.grid(column=2, row=3)
 		self.dictionary = dict_input
 		self.key_list = list(dict_input.keys())
+		random.shuffle(self.key_list)
 		self.key_id = 0
 
 		if __name__ == '__main__':
-			self.key_list = list(dict_input.keys())[:5]
+			self.key_list = self.key_list[:5]
 
 		# self.label = Label(self.root, text="Hello World")
 		# self.label.pack(padx=5, pady=5)
