@@ -26,6 +26,15 @@ def add_data():
     pass
 
 
+def get_non_seen(dictionary):
+    non_seen_entries = {}
+    for k in list(dictionary.keys()):
+        card_rank = dictionary[k].num_right_guess*3 + dictionary[k].num_close_guess*2 + dictionary[k].num_wrong_guess
+        if card_rank == 0:
+            non_seen_entries[k] = dictionary[k]
+    return non_seen_entries
+
+
 def save_learning_state(dict_entries):  # add list_right_guesses, list_close_guesses, list_wrong_guesses
     f = open("dictionary.pkl", "wb")
     pickle.dump(dict_entries, f)
