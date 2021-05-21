@@ -21,6 +21,15 @@ def get_default():
     return dict_entries
 
 
+def get_dict_from_excl_at(path):
+    main_sheet = openpyxl.load_workbook(path).active
+    dict_entries = {}
+    for i in range(1, main_sheet.max_row + 1):
+        dict_entries[main_sheet['A{}'.format(i)].value] = Entry(main_sheet['A{}'.format(i)].value,
+                                                                main_sheet['B{}'.format(i)].value)
+    return dict_entries
+
+
 def add_data():
     # verify doubled entries
     pass
@@ -36,10 +45,15 @@ def get_non_seen(dictionary):
 
 
 def save_learning_state(dict_entries):  # add list_right_guesses, list_close_guesses, list_wrong_guesses
-    f = open("dictionary.pkl", "wb")
+    f = open("dictionary_test.pkl", "wb")
     pickle.dump(dict_entries, f)
     f.close()
 
+
+def save_learning_state_at(dict_entries, path):  # add list_right_guesses, list_close_guesses, list_wrong_guesses
+    f = open(path, "wb")
+    pickle.dump(dict_entries, f)
+    f.close()
 
 def load_learning_state(dict_path):
     with open(dict_path, 'rb') as handle:

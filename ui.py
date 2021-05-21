@@ -3,12 +3,67 @@ from data_management import *
 import random
 
 
-class GUI:
-	def __init__(self, dict_input):
+class Menu:
+	def __init__(self):
 		self.root = Tk()
 		self.root.title('My own flashcards with juegos de azar and mujerzuelas')
 		self.root.geometry('700x400')
+		self.learning_gui = None
+
 		self.root.grid_columnconfigure(3, minsize=100)
+		self.continue_btn = Button(self.root, text='Continue', fg='black', command=self.continue_learning,
+										 font=('Arial', 12))
+		self.continue_btn.grid(column=0, row=0)
+
+		self.update_dict_btn = Button(self.root, text='Update dictionary', fg='black', command=self.update_dictionary,
+									font=('Arial', 12))
+		self.update_dict_btn.grid(column=0, row=1)
+		self.dictionary = None
+
+	def continue_learning(self):
+		self.delete_all_in_root()
+		self.dictionary = load_learning_state('dictionary.pkl')
+		self.learning_gui = GUI(self.dictionary, self.root)
+
+	def update_dictionary(self):
+		old_dictionary = load_learning_state('dictionary.pkl')
+		old_key_list = list(old_dictionary.keys())
+		new_dictionary = get_dict_from_excl_at('../../wokabelheft_zu_importieren.xlsx')
+		new_key_list = list(new_dictionary.keys())
+		num_new_words = 0
+		num_updated_words = 0
+		for k in new_key_list:
+			if k in old_key_list:
+				update_entry = Entry(k, new_dictionary[k].answer)
+				update_entry.num_right_guess = old_dictionary[k].num_right_guess
+				update_entry.num_close_guess = old_dictionary[k].num_close_guess
+				update_entry.num_wrong_guess = old_dictionary[k].num_wrong_guess
+				old_dictionary[k] = update_entry
+				num_updated_words += 1
+			else:
+				old_dictionary[k] = new_dictionary[k]
+				num_new_words += 1
+		save_learning_state_at(old_dictionary, 'dictionary.pkl')
+		print('Dictionary Updated, {} words added, {} words updated'.format(num_new_words, num_updated_words))
+		pass
+
+	def delete_all_in_root(self):
+		list_to_destroy = [x for x in self.root.children.values()]
+		for label in list_to_destroy:
+			label.destroy()
+
+	def start_programm(self):
+		self.root.mainloop()
+		if self.dictionary is not None:
+			save_learning_state_at(self.dictionary, 'dictionary.pkl')
+			print('Learning process saved')
+		else:
+			print('Nothing to save')
+
+
+class GUI:
+	def __init__(self, dict_input, root):
+		self.root = root
 		self.dictionary = dict_input
 		self.learning_interface = None
 
@@ -34,9 +89,6 @@ class GUI:
 		self.delete_all_in_root()
 		self.learning_interface = LearningScreen(self.root, self.dictionary)
 		self.learning_interface.start_ui()
-
-	def start_ui(self):
-		self.root.mainloop()
 
 
 class LearningScreen:
@@ -82,6 +134,7 @@ class LearningScreen:
 			self.key_list = self.key_list[:5]
 
 	def new_word(self):
+		save_learning_state(self.dictionary)
 		if self.key_id < len(self.key_list) - 1:
 			self.key_id += 1
 		else:
@@ -126,9 +179,8 @@ class LearningScreen:
 
 
 if __name__ == '__main__':
-	dictionary = get_default()
-	gui = GUI(dictionary)
-	gui.start_ui()
+	menu = Menu()
+	menu.start_programm()
 
 # # create root window
 # root = Tk()
