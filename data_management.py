@@ -10,7 +10,13 @@ class Entry:
     def __init__(self, word_in, answer_in):
         self.word = word_in
         self.answer = answer_in
+        self.rank = 0
+        # self.num_right_guess = 0
+        # self.num_close_guess = 0
+        # self.num_wrong_guess = 0
 
+    def update_rank(self):
+        self.rank = self.num_right_guess*3 + self.num_close_guess*2 + self.num_wrong_guess
 
 def get_default():
     main_sheet = openpyxl.load_workbook('../../wokabelheft_zu_importieren.xlsx').active
@@ -44,8 +50,12 @@ def get_non_seen(dictionary):
     return non_seen_entries
 
 
+def get_all_learning_order(dictionary):
+    pass
+
+
 def save_learning_state(dict_entries):  # add list_right_guesses, list_close_guesses, list_wrong_guesses
-    f = open("dictionary_test.pkl", "wb")
+    f = open("dictionary.pkl", "wb")
     pickle.dump(dict_entries, f)
     f.close()
 
