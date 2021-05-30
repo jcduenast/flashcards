@@ -71,9 +71,13 @@ class GUI:
 								   font=('Arial', 12))
 		self.learn_non_seen_btn.grid(column=0, row=0)
 
-		self.learn_all_btn = Button(self.root, text='Study all', fg='black', command=self.learn_all,
+		self.learn_all_btn = Button(self.root, text='Study sorted', fg='black', command=self.learn_sorted,
 								   font=('Arial', 12))
 		self.learn_all_btn.grid(column=0, row=1)
+
+		self.learn_all_btn = Button(self.root, text='Study all', fg='black', command=self.learn_all,
+								   font=('Arial', 12))
+		self.learn_all_btn.grid(column=0, row=2)
 
 	def delete_all_in_root(self):
 		list_to_destroy = [x for x in self.root.children.values()]
@@ -83,11 +87,19 @@ class GUI:
 	def learn_non_seen(self):
 		self.delete_all_in_root()
 		self.learning_interface = LearningScreen(self.root, get_non_seen(self.dictionary))
+		self.learning_interface.order_keys('random')
+		self.learning_interface.start_ui()
+
+	def learn_sorted(self):
+		self.delete_all_in_root()
+		self.learning_interface = LearningScreen(self.root, self.dictionary)
+		self.learning_interface.order_keys('difficult_first')
 		self.learning_interface.start_ui()
 
 	def learn_all(self):
 		self.delete_all_in_root()
 		self.learning_interface = LearningScreen(self.root, self.dictionary)
+		self.learning_interface.order_keys('random')
 		self.learning_interface.start_ui()
 
 
@@ -125,13 +137,24 @@ class LearningScreen:
 
 		self.dictionary = learning_dictionary
 		self.key_list = list(self.dictionary.keys())
-		random.shuffle(self.key_list)
 		self.key_id = 0
 
 		self.start_ui()
 
 		if __name__ == '__main__':
 			self.key_list = self.key_list[:5]
+
+	def order_keys(self, mode):
+		if mode == 'random':
+			random.shuffle(self.key_list)
+		elif mode == 'difficult_first':
+			for k in self.key_list:
+				self.dictionary[k].update_rank()
+			self.key_list.sort(key=lambda x: self.dictionary[x].rank, reverse=False)
+			for k in self.key_list:
+				print(k, self.dictionary[k].rank)
+		else:
+			pass
 
 	def new_word(self):
 		save_learning_state(self.dictionary)
