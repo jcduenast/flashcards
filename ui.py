@@ -71,13 +71,21 @@ class GUI:
 								   font=('Arial', 12))
 		self.learn_non_seen_btn.grid(column=0, row=0)
 
-		self.learn_all_btn = Button(self.root, text='Study sorted', fg='black', command=self.learn_sorted,
+		self.learn_all_btn = Button(self.root, text='Study most difficult', fg='black', command=self.learn_difficult,
 								   font=('Arial', 12))
 		self.learn_all_btn.grid(column=0, row=1)
 
-		self.learn_all_btn = Button(self.root, text='Study all', fg='black', command=self.learn_all,
+		self.learn_all_btn = Button(self.root, text='Study partially learnt', fg='black', command=self.learn_partial,
 								   font=('Arial', 12))
 		self.learn_all_btn.grid(column=0, row=2)
+
+		self.learn_all_btn = Button(self.root, text='Study sorted', fg='black', command=self.learn_sorted,
+								   font=('Arial', 12))
+		self.learn_all_btn.grid(column=0, row=3)
+
+		self.learn_all_btn = Button(self.root, text='Study all', fg='black', command=self.learn_all,
+								   font=('Arial', 12))
+		self.learn_all_btn.grid(column=0, row=4)
 
 	def delete_all_in_root(self):
 		list_to_destroy = [x for x in self.root.children.values()]
@@ -86,7 +94,22 @@ class GUI:
 
 	def learn_non_seen(self):
 		self.delete_all_in_root()
+		self.learning_interface = LearningScreen(self.root, self.dictionary)
+		self.learning_interface.key_list = get_non_seen_keys(self.dictionary)
+		self.learning_interface.order_keys('random')
+		self.learning_interface.start_ui()
+
+	def learn_difficult(self):
+		self.delete_all_in_root()
+		self.learning_interface = LearningScreen(self.root, self.dictionary)
+		self.learning_interface.key_list = get_difficult_keys(self.dictionary)
+		self.learning_interface.order_keys('random')
+		self.learning_interface.start_ui()
+
+	def learn_partial(self):
+		self.delete_all_in_root()
 		self.learning_interface = LearningScreen(self.root, get_non_seen(self.dictionary))
+		self.learning_interface.key_list = get_partial_keys(self.dictionary)
 		self.learning_interface.order_keys('random')
 		self.learning_interface.start_ui()
 

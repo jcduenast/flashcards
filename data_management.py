@@ -50,6 +50,34 @@ def get_non_seen(dictionary):
     return non_seen_entries
 
 
+def get_non_seen_keys(dictionary):
+    non_seen_keys = []
+    for k in list(dictionary.keys()):
+        card_rank = dictionary[k].num_right_guess + dictionary[k].num_close_guess + dictionary[k].num_wrong_guess
+        if card_rank == 0:
+            non_seen_keys.append(k)
+    return non_seen_keys
+
+
+def get_difficult_keys(dictionary):
+    non_seen_keys = []
+    for k in list(dictionary.keys()):
+        card_rank = dictionary[k].num_right_guess + dictionary[k].num_close_guess + dictionary[k].num_wrong_guess
+        if card_rank != 0 and dictionary[k].num_close_guess < 3 and \
+                dictionary[k].num_right_guess == 0:
+            non_seen_keys.append(k)
+    return non_seen_keys
+
+
+def get_partial_keys(dictionary):
+    non_seen_keys = []
+    for k in list(dictionary.keys()):
+        unknown = dictionary[k].num_wrong_guess
+        if dictionary[k].num_close_guess >= 3 and dictionary[k].num_right_guess < 4:
+            non_seen_keys.append(k)
+    return non_seen_keys
+
+
 def get_all_learning_order(dictionary):
     pass
 
