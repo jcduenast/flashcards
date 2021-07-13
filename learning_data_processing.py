@@ -29,7 +29,3 @@ print('Num non seen cards:', num_not_seen)
 
 today = date.today()
 print("Today's date:", type(today))
-
-
-
-

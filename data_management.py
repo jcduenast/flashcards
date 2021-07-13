@@ -18,6 +18,7 @@ class Entry:
     def update_rank(self):
         self.rank = self.num_right_guess*3 + self.num_close_guess*2 + self.num_wrong_guess
 
+
 def get_default():
     main_sheet = openpyxl.load_workbook('../../wokabelheft_zu_importieren.xlsx').active
     dict_entries = {}
@@ -72,7 +73,6 @@ def get_difficult_keys(dictionary):
 def get_partial_keys(dictionary):
     non_seen_keys = []
     for k in list(dictionary.keys()):
-        unknown = dictionary[k].num_wrong_guess
         if dictionary[k].num_close_guess >= 3 and dictionary[k].num_right_guess < 4:
             non_seen_keys.append(k)
     return non_seen_keys
@@ -93,8 +93,8 @@ def save_learning_state_at(dict_entries, path):  # add list_right_guesses, list_
     pickle.dump(dict_entries, f)
     f.close()
 
+
 def load_learning_state(dict_path):
     with open(dict_path, 'rb') as handle:
         data = handle.read()
     return pickle.loads(data)
-
