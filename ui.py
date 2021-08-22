@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import scrolledtext
 from data_management import *
 import random
 
@@ -152,8 +153,14 @@ class LearningScreen:
         self.cards_num.grid(column=0, row=0)
         self.word = Label(self.root, text='Wort', font=('Arial', 30))
         self.word.grid(column=1, row=0)
-        self.answer = Label(self.root, text='-------', font=('Arial', 15))
-        self.answer.grid(column=1, row=1)
+        # self.answer = Label(self.root, text='-------', font=('Arial', 15))  # old word text box
+        # self.answer.grid(column=1, row=1)
+        self.answer = scrolledtext.ScrolledText(root, wrap=WORD, width=30, height=2, font=('Arial', 15))
+        self.answer.grid(column=1, row=1, pady=20, padx=20)
+        # self.answer.insert(INSERT, '-------')
+        self.save_changes_button = Button(self.root, text='Änderungen\nspeichern', fg='black', command=self.save_changes,
+                                   font=('Arial', self.btn_font_size), state=DISABLED)
+        self.save_changes_button.grid(column=2, row=1)
         self.right_answer = Label(self.root, text='0', fg='green', font=('Arial', self.btn_font_size))
         self.right_answer.grid(column=0, row=4)
         self.close_answer = Label(self.root, text='0', fg='orange', font=('Arial', self.btn_font_size))
@@ -197,6 +204,7 @@ class LearningScreen:
             pass
 
     def new_word(self):
+        self.save_changes_button['state'] = DISABLED
         save_learning_state(self.dictionary)
         if self.key_id < len(self.key_list) - 1:
             self.key_id += 1
@@ -204,13 +212,21 @@ class LearningScreen:
             self.key_id = 0
         self.cards_num.configure(text=str(self.key_id + 1) + '/' + str(len(self.key_list)))
         self.word.configure(text=self.key_list[self.key_id])
-        self.answer.configure(text='-------')
+        # self.answer.configure(text='-------')  # old text box
+        self.answer.delete('1.0', END)           # new text box
         self.right_answer.configure(text=str(self.dictionary[self.key_list[self.key_id]].num_right_guess))
         self.close_answer.configure(text=str(self.dictionary[self.key_list[self.key_id]].num_close_guess))
         self.wrong_answer.configure(text=str(self.dictionary[self.key_list[self.key_id]].num_wrong_guess))
 
     def show_answer(self):
-        self.answer.configure(text=self.dictionary[self.key_list[self.key_id]].answer)
+        # self.answer.configure(text=self.dictionary[self.key_list[self.key_id]].answer)  # old answer box
+        self.answer.delete('1.0', END)                                                    # new answer scroll box
+        self.answer.insert(INSERT, self.dictionary[self.key_list[self.key_id]].answer)    # new answer scroll box
+        self.save_changes_button['state'] = NORMAL
+
+    def save_changes(self):
+        self.dictionary[self.key_list[self.key_id]].answer = self.answer.get('1.0', END)
+        print('Entry updated')
 
     def click_right(self):
         self.dictionary[self.key_list[self.key_id]].num_right_guess += 1
@@ -244,45 +260,3 @@ class LearningScreen:
 if __name__ == '__main__':
     menu = Menu()
     menu.start_programm()
-
-# # create root window
-# root = Tk()
-#
-# # root window title and dimension
-# root.title("Welcome to GeekForGeeks")
-# # Set geometry(widthxheight)
-# root.geometry('350x200')
-#
-# # adding menu bar in root window
-# # new item in menu bar labelled as 'New'
-# # adding more items in the menu bar
-# menu = Menu(root)
-# item = Menu(menu)
-# item.add_command(label='New')
-# menu.add_cascade(label='File', menu=item)
-# root.config(menu=menu)
-#
-# # adding a label to the root window
-# lbl = Label(root, text = "Are you a Geek?")
-# lbl.grid()
-#
-# # adding Entry Field
-# txt = Entry(root, width=10)
-# txt.grid(column =1, row =0)
-#
-#
-# # function to display user text when
-# # button is clicked
-# def clicked():
-#
-# 	res = "You wrote" + txt.get()
-# 	lbl.configure(text = res)
-#
-# # button widget with red color text inside
-# btn = Button(root, text = "Click me" ,
-# 			fg = "red", command=clicked)
-# # Set Button Grid
-# btn.grid(column=2, row=0)
-#
-# # Execute Tkinter
-# root.mainloop()
