@@ -155,9 +155,12 @@ class LearningScreen:
         self.word.grid(column=1, row=0)
         # self.answer = Label(self.root, text='-------', font=('Arial', 15))  # old word text box
         # self.answer.grid(column=1, row=1)
-        self.answer = scrolledtext.ScrolledText(root, wrap=WORD, width=30, height=2, font=("Times New Roman", 15))
+        self.answer = scrolledtext.ScrolledText(root, wrap=WORD, width=30, height=2, font=('Arial', 15))
         self.answer.grid(column=1, row=1, pady=20, padx=20)
         # self.answer.insert(INSERT, '-------')
+        self.save_changes = Button(self.root, text='Änderungen\nspeichern', fg='black', command=self.save_changes,
+                                   font=('Arial', self.btn_font_size))
+        self.save_changes.grid(column=2, row=1)
         self.right_answer = Label(self.root, text='0', fg='green', font=('Arial', self.btn_font_size))
         self.right_answer.grid(column=0, row=4)
         self.close_answer = Label(self.root, text='0', fg='orange', font=('Arial', self.btn_font_size))
@@ -218,6 +221,9 @@ class LearningScreen:
         # self.answer.configure(text=self.dictionary[self.key_list[self.key_id]].answer)  # old answer box
         self.answer.delete('1.0', END)                                                    # new answer scroll box
         self.answer.insert(INSERT, self.dictionary[self.key_list[self.key_id]].answer)    # new answer scroll box
+
+    def save_changes(self):
+        pass
 
     def click_right(self):
         self.dictionary[self.key_list[self.key_id]].num_right_guess += 1
