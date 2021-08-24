@@ -14,11 +14,11 @@ class Menu:
         self.root.grid_columnconfigure(3, minsize=100)
         self.continue_btn = Button(self.root, text='Continue', fg='black', command=self.continue_learning,
                                    font=('Arial', 12))
-        self.continue_btn.grid(column=0, row=0)
+        self.continue_btn.grid(column=0, row=0, pady=20, padx=20)
 
         self.update_dict_btn = Button(self.root, text='Update dictionary', fg='black', command=self.update_dictionary,
                                       font=('Arial', 12))
-        self.update_dict_btn.grid(column=0, row=1)
+        self.update_dict_btn.grid(column=0, row=1, pady=0, padx=20)
         self.dictionary = None
 
     def continue_learning(self):  # Check if there is any dictionary to continue on
@@ -75,23 +75,23 @@ class GUI:
         self.delete_all_in_root()
         self.learn_non_seen_btn = Button(self.root, text='Study non seen', fg='black', command=self.learn_non_seen,
                                          font=('Arial', 12))
-        self.learn_non_seen_btn.grid(column=0, row=0)
+        self.learn_non_seen_btn.grid(column=0, row=0, pady=10, padx=20)
 
         self.learn_all_btn = Button(self.root, text='Study most difficult', fg='black', command=self.learn_difficult,
                                     font=('Arial', 12))
-        self.learn_all_btn.grid(column=0, row=1)
+        self.learn_all_btn.grid(column=0, row=1, pady=10, padx=20)
 
         self.learn_all_btn = Button(self.root, text='Study partially learnt', fg='black', command=self.learn_partial,
                                     font=('Arial', 12))
-        self.learn_all_btn.grid(column=0, row=2)
+        self.learn_all_btn.grid(column=0, row=2, pady=10, padx=20)
 
         self.learn_all_btn = Button(self.root, text='Study sorted', fg='black', command=self.learn_sorted,
                                     font=('Arial', 12))
-        self.learn_all_btn.grid(column=0, row=3)
+        self.learn_all_btn.grid(column=0, row=3, pady=10, padx=20)
 
         self.learn_all_btn = Button(self.root, text='Study all', fg='black', command=self.learn_all,
                                     font=('Arial', 12))
-        self.learn_all_btn.grid(column=0, row=4)
+        self.learn_all_btn.grid(column=0, row=4, pady=10, padx=20)
 
     def delete_all_in_root(self):
         list_to_destroy = [x for x in self.root.children.values()]
@@ -150,37 +150,37 @@ class LearningScreen:
         self.btn_font_size = 12
         self.learning_ui = []
         self.cards_num = Label(self.root, text='001/100', font=('Arial', 12))
-        self.cards_num.grid(column=0, row=0)
+        self.cards_num.grid(column=0, row=0, pady=10, padx=20)
         self.word = Label(self.root, text='Wort', font=('Arial', 30))
-        self.word.grid(column=1, row=0)
+        self.word.grid(column=1, row=0, pady=20)
         # self.answer = Label(self.root, text='-------', font=('Arial', 15))  # old word text box
         # self.answer.grid(column=1, row=1)
         self.answer = scrolledtext.ScrolledText(root, wrap=WORD, width=30, height=2, font=('Arial', 15))
-        self.answer.grid(column=1, row=1, pady=20, padx=20)
+        self.answer.grid(column=1, row=1, pady=10, padx=20)
         # self.answer.insert(INSERT, '-------')
         self.save_changes_button = Button(self.root, text='Änderungen\nspeichern', fg='black', command=self.save_changes,
                                    font=('Arial', self.btn_font_size), state=DISABLED)
-        self.save_changes_button.grid(column=2, row=1)
+        self.save_changes_button.grid(column=2, row=1, pady=10, padx=20)
         self.right_answer = Label(self.root, text='0', fg='green', font=('Arial', self.btn_font_size))
-        self.right_answer.grid(column=0, row=4)
+        self.right_answer.grid(column=0, row=4, padx=20)
         self.close_answer = Label(self.root, text='0', fg='orange', font=('Arial', self.btn_font_size))
         self.close_answer.grid(column=1, row=4)
         self.wrong_answer = Label(self.root, text='0', fg='red', font=('Arial', self.btn_font_size))
-        self.wrong_answer.grid(column=2, row=4)
+        self.wrong_answer.grid(column=2, row=4, padx=20)
 
         self.get_answer = Button(self.root, text='Antwort zeigen', fg='black', command=self.show_answer,
                                  font=('Arial', self.btn_font_size))
-        self.get_answer.grid(column=1, row=2)
+        self.get_answer.grid(column=1, row=2, pady=10)
 
         self.btn_right = Button(self.root, text='Richtig!', fg='green', command=self.click_right,
                                 font=('Arial', self.btn_font_size))
-        self.btn_right.grid(column=0, row=3)
+        self.btn_right.grid(column=0, row=3, pady=10, padx=20)
         self.btn_close = Button(self.root, text='Teilweise', fg='orange', command=self.click_close,
                                 font=('Arial', self.btn_font_size))
-        self.btn_close.grid(column=1, row=3)
+        self.btn_close.grid(column=1, row=3, pady=10)
         self.btn_wrong = Button(self.root, text='Unbekannt', fg='red', command=self.click_wrong,
                                 font=('Arial', self.btn_font_size))
-        self.btn_wrong.grid(column=2, row=3)
+        self.btn_wrong.grid(column=2, row=3, pady=10, padx=20)
 
         self.dictionary = learning_dictionary
         self.key_list = list(self.dictionary.keys())
