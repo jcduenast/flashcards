@@ -10,6 +10,7 @@ class Menu:
         self.root.title('My own flashcards')
         self.root.geometry('700x400')
         self.learning_gui = None
+        self.add_entries_gui = None
 
         self.root.grid_columnconfigure(3, minsize=100)
         self.continue_btn = Button(self.root, text='Continue', fg='black', command=self.continue_learning,
@@ -19,11 +20,18 @@ class Menu:
         self.update_dict_btn = Button(self.root, text='Update dictionary', fg='black', command=self.update_dictionary,
                                       font=('Arial', 12))
         self.update_dict_btn.grid(column=0, row=1, pady=0, padx=20)
+        self.add_entries_btn = Button(self.root, text='Add new entries', fg='black', command=self.add_entries_mode,
+                                      font=('Arial', 12))
+        self.add_entries_btn.grid(column=0, row=2, pady=20, padx=20)
         self.dictionary = None
 
     def continue_learning(self):  # Check if there is any dictionary to continue on
         self.delete_all_in_root()
-        self.dictionary = load_learning_state('dictionary.pkl')
+        if __name__ == '__main__':
+            self.dictionary = {'abc':Entry('abc', 'abc'), 'asd':Entry('asd', 'asd'), 'bbb':Entry('bbb', 'aaa')}
+            print('Starting with fake dictionary')
+        else:
+            self.dictionary = load_learning_state('dictionary.pkl')
         self.learning_gui = GUI(self.dictionary, self.root)
 
     def update_dictionary(self):  # Check if there is any dictionary to work on
@@ -48,6 +56,15 @@ class Menu:
         print('Dictionary Updated, {} words added, {} words updated'.format(num_new_words, num_updated_words))
         pass
 
+    def add_entries_mode(self):
+        self.delete_all_in_root()
+        if __name__ == '__main__':
+            self.dictionary = {'abc':Entry('abc', 'abc'), 'asd':Entry('asd', 'asd'), 'bbb':Entry('bbb', 'aaa')}
+            print('Starting with fake dictionary')
+        else:
+            self.dictionary = load_learning_state('dictionary.pkl')
+        self.add_entries_gui = AddEntries(self.dictionary, self.root)
+
     def delete_all_in_root(self):
         list_to_destroy = [x for x in self.root.children.values()]
         for label in list_to_destroy:
@@ -55,11 +72,33 @@ class Menu:
 
     def start_programm(self):
         self.root.mainloop()
-        if self.dictionary is not None:
+        if self.dictionary is None or __name__ == '__main__':
+            print('Nothing to save')
+        else:
             save_learning_state_at(self.dictionary, 'dictionary.pkl')
             print('Learning process saved')
-        else:
-            print('Nothing to save')
+
+
+class AddEntries:
+    def __init__(self, dict_input, root):
+        self.root = root
+        self.dictionary = dict_input
+        self.btn_font_size = 12
+        self.input = scrolledtext.ScrolledText(root, wrap=WORD, width=30, height=2, font=('Arial', 15))
+        self.input.grid(column=0, row=0, pady=10, padx=10)
+        self.answer = scrolledtext.ScrolledText(root, wrap=WORD, width=30, height=2, font=('Arial', 15))
+        self.answer.grid(column=0, row=1, pady=10, padx=10)
+        self.save_new_entry_btn = Button(self.root, text='Eintrag speichern', fg='black', command=self.save_new_entry,
+                                         font=('Arial', self.btn_font_size))
+        self.save_new_entry_btn.grid(column=0, row=2, pady=10)
+
+    def save_new_entry(self):
+        new_entry = Entry(self.input.get('1.0', END)[:-1], self.answer.get('1.0', END)[:-1])
+        self.dictionary[self.input.get('1.0', END)[:-1]] = new_entry
+        self.input.delete('1.0', END)
+        self.answer.delete('1.0', END)
+        # print(list(self.dictionary.keys()))
+        # print(list(self.dictionary.values()))
 
 
 class GUI:
@@ -259,4 +298,5 @@ class LearningScreen:
 
 if __name__ == '__main__':
     menu = Menu()
+    print('Starting in try mode')
     menu.start_programm()
